@@ -30,7 +30,7 @@ class TableItemWidget extends StatelessWidget {
             ),
             const SizedBox(height: 6),
             Text(
-              item.customerName,
+              item.waiterName,
               style: Theme.of(context).textTheme.bodyMedium,
             ),
           ],

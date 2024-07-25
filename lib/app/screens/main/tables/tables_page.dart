@@ -51,7 +51,7 @@ class _TablesPageState extends State<TablesPage> {
                     final item = tables[index];
                     return TableItemWidget(
                       item: item,
-                      onTap: (a) {},
+                      onTap: (table) => _viewModel.openDetail(context, table),
                     );
                   },
                 );

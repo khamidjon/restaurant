@@ -14,7 +14,7 @@ dependencies:
   cupertino_icons: ^1.0.2
 
   # Storage
-  sqflite: ^2.3.3+1
+  floor: ^1.5.0
 
   # State management
   flutter_bloc: ^8.1.6
@@ -36,6 +36,7 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   build_runner: ^2.4.5
   injectable_generator: ^2.1.6
+  floor_generator: ^1.4.2
 
 flutter:
   uses-material-design: true

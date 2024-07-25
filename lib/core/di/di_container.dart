@@ -6,6 +6,10 @@ final getIt = GetIt.instance;
 
 @InjectableInit()
 Future<void> initDi() async {
-  getIt.init();
+  await getIt.init();
   return getIt.allReady();
+}
+
+Future<void> disposeDi() {
+  return getIt.reset();
 }

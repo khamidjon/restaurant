@@ -2,19 +2,19 @@ import 'package:equatable/equatable.dart';
 
 class TableEntity with EquatableMixin {
   const TableEntity({
+    required this.id,
     required this.number,
-    required this.customerName,
-    required this.orders,
+    required this.waiterName,
   });
 
+  final int id;
   final int number;
-  final String customerName;
-  final int orders;
+  final String waiterName;
 
   @override
   List<Object> get props => [
+        id,
         number,
-        customerName,
-        orders,
+        waiterName,
       ];
 }
