@@ -32,7 +32,12 @@ class _TableDetailScreenState extends State<TableDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.white,
+        title: Text( 'T ${widget.table.number}'),
+      ),
       body: Column(
         children: [
           Expanded(child: SizedBox()),
