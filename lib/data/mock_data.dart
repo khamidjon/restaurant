@@ -78,3 +78,4 @@ const mockMenu = <MenuItemEntity>[
   MenuItemEntity(id: 6, price: 11, name: 'Coffee Espresso'),
   MenuItemEntity(id: 7, price: 5, name: 'Tea'),
 ];
+

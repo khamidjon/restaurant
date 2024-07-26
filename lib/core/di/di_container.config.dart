@@ -14,9 +14,12 @@ import 'package:restaurant/data/local/database.dart' as _i631;
 import 'package:restaurant/data/local/local_module.dart' as _i965;
 import 'package:restaurant/data/repositories/menu_repository_impl.dart'
     as _i424;
+import 'package:restaurant/data/repositories/order_repository_impl.dart'
+    as _i497;
 import 'package:restaurant/data/repositories/tables_repository_impl.dart'
     as _i123;
 import 'package:restaurant/domain/repositories/menu_repository.dart' as _i833;
+import 'package:restaurant/domain/repositories/order_repository.dart' as _i646;
 import 'package:restaurant/domain/repositories/tables_repository.dart' as _i419;
 
 extension GetItInjectableX on _i174.GetIt {
@@ -36,6 +39,8 @@ extension GetItInjectableX on _i174.GetIt {
       preResolve: true,
       dispose: _i965.closeDatabase,
     );
+    gh.singleton<_i646.OrderRepository>(
+        () => _i497.OrderRepositoryImpl(gh<_i631.AppDatabase>()));
     gh.singleton<_i833.MenuRepository>(
         () => _i424.MenuRepositoryImpl(gh<_i631.AppDatabase>()));
     gh.singleton<_i419.TablesRepository>(

@@ -4,6 +4,7 @@ import 'package:restaurant/core/di/di_container.dart';
 import 'package:restaurant/core/di/inject.dart';
 import 'package:restaurant/data/mock_data.dart';
 import 'package:restaurant/domain/repositories/menu_repository.dart';
+import 'package:restaurant/domain/repositories/order_repository.dart';
 import 'package:restaurant/domain/repositories/tables_repository.dart';
 
 void main() async {
@@ -12,6 +13,7 @@ void main() async {
   await initDi();
 
   // await _populateDatabase();
+  // await _populateOrders();
 
   runApp(
     const RestaurantApp(),
@@ -24,4 +26,10 @@ Future<void> _populateDatabase() async {
 
   final menuRepository = inject<MenuRepository>();
   await menuRepository.insertMenu(mockMenu);
+}
+
+
+Future<void> _populateOrders() async {
+  final repo = inject<OrderRepository>();
+  await repo.insertOrder(mockTables[0], mockMenu[0]);
 }

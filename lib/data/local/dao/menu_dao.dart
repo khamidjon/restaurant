@@ -8,4 +8,7 @@ abstract class MenuDao {
 
   @insert
   Future<void> insertMenuItem(MenuItemRecord menuItem);
+
+  @Query('SELECT * FROM MenuItemRecord WHERE id = :id')
+  Future<MenuItemRecord?> findMenuItem(int id);
 }

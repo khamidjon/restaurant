@@ -76,6 +76,8 @@ class _$AppDatabase extends AppDatabase {
 
   MenuDao? _menuDaoInstance;
 
+  OrderDao? _orderDaoInstance;
+
   Future<sqflite.Database> open(
     String path,
     List<Migration> migrations, [
@@ -101,6 +103,8 @@ class _$AppDatabase extends AppDatabase {
             'CREATE TABLE IF NOT EXISTS `TableRecord` (`id` INTEGER NOT NULL, `number` INTEGER NOT NULL, `waiterName` TEXT NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `MenuItemRecord` (`id` INTEGER NOT NULL, `price` REAL NOT NULL, `name` TEXT NOT NULL, PRIMARY KEY (`id`))');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `orders` (`tableId` INTEGER NOT NULL, `menuItemId` INTEGER NOT NULL, PRIMARY KEY (`tableId`, `menuItemId`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -116,6 +120,11 @@ class _$AppDatabase extends AppDatabase {
   @override
   MenuDao get menuDao {
     return _menuDaoInstance ??= _$MenuDao(database, changeListener);
+  }
+
+  @override
+  OrderDao get orderDao {
+    return _orderDaoInstance ??= _$OrderDao(database, changeListener);
   }
 }
 
@@ -186,8 +195,69 @@ class _$MenuDao extends MenuDao {
   }
 
   @override
+  Future<MenuItemRecord?> findMenuItem(int id) async {
+    return _queryAdapter.query('SELECT * FROM MenuItemRecord WHERE id = ?1',
+        mapper: (Map<String, Object?> row) => MenuItemRecord(
+            id: row['id'] as int,
+            name: row['name'] as String,
+            price: row['price'] as double),
+        arguments: [id]);
+  }
+
+  @override
   Future<void> insertMenuItem(MenuItemRecord menuItem) async {
     await _menuItemRecordInsertionAdapter.insert(
         menuItem, OnConflictStrategy.abort);
+  }
+}
+
+class _$OrderDao extends OrderDao {
+  _$OrderDao(
+    this.database,
+    this.changeListener,
+  )   : _queryAdapter = QueryAdapter(database),
+        _orderRecordInsertionAdapter = InsertionAdapter(
+            database,
+            'orders',
+            (OrderRecord item) => <String, Object?>{
+                  'tableId': item.tableId,
+                  'menuItemId': item.menuItemId
+                }),
+        _orderRecordDeletionAdapter = DeletionAdapter(
+            database,
+            'orders',
+            ['tableId', 'menuItemId'],
+            (OrderRecord item) => <String, Object?>{
+                  'tableId': item.tableId,
+                  'menuItemId': item.menuItemId
+                });
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  final InsertionAdapter<OrderRecord> _orderRecordInsertionAdapter;
+
+  final DeletionAdapter<OrderRecord> _orderRecordDeletionAdapter;
+
+  @override
+  Future<List<int>> fetchTableOrders(int tableId) async {
+    return _queryAdapter.queryList(
+        'SELECT menuItemId FROM orders WHERE tableId = ?1',
+        mapper: (Map<String, Object?> row) => row.values.first as int,
+        arguments: [tableId]);
+  }
+
+  @override
+  Future<void> insertOrder(OrderRecord order) async {
+    await _orderRecordInsertionAdapter.insert(
+        order, OnConflictStrategy.replace);
+  }
+
+  @override
+  Future<void> deleteOrder(OrderRecord order) async {
+    await _orderRecordDeletionAdapter.delete(order);
   }
 }
