@@ -12,7 +12,8 @@ void main() async {
   await disposeDi();
   await initDi();
 
-  // await _populateDatabase();
+  // await _populateTables();
+  // await _populateMenu();
   // await _populateOrders();
 
   runApp(
@@ -20,14 +21,15 @@ void main() async {
   );
 }
 
-Future<void> _populateDatabase() async {
+Future<void> _populateTables() async {
   final tablesRepository = inject<TablesRepository>();
   await tablesRepository.insertTables(mockTables);
+}
 
+Future<void> _populateMenu() async {
   final menuRepository = inject<MenuRepository>();
   await menuRepository.insertMenu(mockMenu);
 }
-
 
 Future<void> _populateOrders() async {
   final repo = inject<OrderRepository>();
